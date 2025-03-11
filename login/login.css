@@ -24,7 +24,7 @@ h1 {
   font-size: 32px;
   margin-bottom: 32px;
 }
-.registerForm {
+.loginForm {
   width: 50%;
   background-color: #f5f5f5;
   border: 2px solid black;
@@ -38,17 +38,6 @@ h1 {
   gap: 32px;
 }
 
-.form--name {
-  display: flex;
-  gap: 8px;
-}
-
-.name {
-  input {
-    width: 192px;
-
-  }
-}
 .password {
   display: flex;
   flex-direction: column;

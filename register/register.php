@@ -60,7 +60,7 @@ if (!empty($_POST)) {
       $stmt = $db->prepare("select email from users where LOWER(email) = LOWER(?) LIMIT 1");
       $stmt->execute([$email]);
       $fetchEmail = $stmt->fetch(PDO::FETCH_ASSOC);
-      echo $fetchEmail;
+
       // 重複していれば、エラーを出し、そうでなければ登録する
       if (isset($fetchEmail['email'])) {
         $err_msg['email'] = MSG03;
@@ -106,7 +106,7 @@ if (!empty($_POST)) {
       </div>
     </div>
     <div class="email">
-      <label for="email">email</label>
+      <label for="email">メールアドレス</label>
       <input type="email" name="email" id="email" value="<?php echo $_POST['email'] ?? ""; ?>">
       <span class="err--msg"><?php if (!empty($err_msg['email'])) echo $err_msg['email']; ?></span>
     </div>
@@ -125,7 +125,7 @@ if (!empty($_POST)) {
   </form>
   <div class="login">
     <p>アカウントをお持ちの場合</p>
-    <p><a href="login.php">ログイン</a></p>
+    <p><a href="../login/login.php">ログイン</a></p>
   </div>
 </body>
 
