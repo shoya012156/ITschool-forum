@@ -1,0 +1,111 @@
+body {
+  font-size: 16px;
+  letter-spacing: .05em;
+}
+
+
+li {
+  list-style: none;
+}
+
+h1 {
+  position: relative;
+}
+
+h1::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/kkrn_icon_user_1.svg);
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  transform: translateY(-50%);
+}
+
+.wrapper {
+  max-width: 1140px;
+  padding: 32px;
+  margin: 0 auto;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 32px;
+}
+
+.main {
+  width: 100%;
+}
+
+.aside {
+  position: sticky;
+  width: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  border-right: 1px solid rgba(0, 0, 0, .5);
+}
+
+
+
+
+.tweetCard {
+  width: 792px;
+  height: auto;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+  overflow-wrap: anywhere;
+  margin-bottom: 64px;
+}
+
+.tweet {
+  font-size: 16px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.name {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.reply_form {
+  width: 792px;
+  height: auto;
+  margin-bottom: 32px;
+}
+
+.reply {
+  width: 100%;
+  height: 250px;
+  margin-bottom: 16px;
+  border: 1px solid black;
+  padding: 16px;
+  resize: none;
+}
+
+.btn {
+  font-weight: bold;
+  display: block;
+  margin-left: auto;
+  width: 160px;
+  height: auto;
+  text-align: center;
+  border-radius: 30px;
+  padding: 16px;
+  background-color: aqua;
+}
+
+.reply_item {
+  width: 100%;                        
+  border-bottom: 1px solid black;
+  padding: 32px;
+}

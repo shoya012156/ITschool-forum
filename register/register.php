@@ -67,7 +67,7 @@ if (!empty($_POST)) {
       } else {
         $stmt = $db->prepare("insert into users(first_name,last_name,email, password) values(?, ?, ?, ?)");
         $stmt->execute([$firstName, $lastName, $email, $hashedPassword]);
-        header('Location: http://localhost/success.php');
+        header('Location: http://localhost/top/top.php');
         exit();
       }
     }
@@ -96,29 +96,29 @@ if (!empty($_POST)) {
     <div class="form--name">
       <div class="firstName name">
         <label for="name">姓</label>
-        <input type="text" name="firstName" id="firstName" value="<?php echo $_POST['firstName'] ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['firstName'])) echo $err_msg['firstName']; ?></span>
+        <input type="text" name="firstName" id="firstName" value="<?php echo htmlspecialchars($_POST['firstName'],ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['firstName'])) echo htmlspecialchars($err_msg['firstName'],ENT_QUOTES); ?></span>
       </div>
       <div class="lastName name">
         <label for="name">名</label>
-        <input type="text" name="lastName" id="lastName" value="<?php echo $_POST['lastName'] ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['lastName'])) echo $err_msg['lastName']; ?></span>
+        <input type="text" name="lastName" id="lastName" value="<?php echo htmlspecialchars($_POST['lastName'],ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['lastName'])) echo htmlspecialchars($err_msg['lastName'],ENT_QUOTES); ?></span>
       </div>
     </div>
     <div class="email">
       <label for="email">メールアドレス</label>
-      <input type="email" name="email" id="email" value="<?php echo $_POST['email'] ?? ""; ?>">
-      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo $err_msg['email']; ?></span>
+      <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($_POST['email'],ENT_QUOTES) ?? ""; ?>">
+      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo htmlspecialchars($err_msg['email'],ENT_QUOTES); ?></span>
     </div>
     <div class="password">
       <div class="password1">
         <label for="password1">パスワード</label>
-        <input type="password" name="password1" id="password1" value="<?php echo $_POST['password1'] ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo $err_msg['password1']; ?></span>
+        <input type="password" name="password1" id="password1" value="<?php echo htmlspecialchars($_POST['password1'],ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo htmlspecialchars($err_msg['password1'],ENT_QUOTES); ?></span>
       </div>
       <div class="password2">
         <label for="password2">パスワード再入力</label>
-        <input type="password" name="password2" id="password2" value="<?php echo $_POST['password2'] ?? ""; ?>">
+        <input type="password" name="password2" id="password2" value="<?php echo htmlspecialchars($_POST['password2'],ENT_QUOTES) ?? ""; ?>">
       </div>
     </div>
     <input type="submit" value="確認する" class="btn">

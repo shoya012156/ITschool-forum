@@ -69,14 +69,14 @@ if (!empty($_POST)) {
   <form action="" method="post" class="loginForm">
     <div class="email">
       <label for="email">メールアドレス</label>
-      <input type="email" name="email" id="email" value="<?php echo $_POST['email'] ?? ""; ?>">
-      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo $err_msg['email']; ?></span>
+      <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($_POST['email'],ENT_QUOTES) ?? ""; ?>">
+      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo htmlspecialchars($err_msg['email'],ENT_QUOTES); ?></span>
     </div>
     <div class="password">
       <div class="password1">
         <label for="password1">パスワード</label>
-        <input type="password" name="password1" id="password1" value="<?php echo $_POST['password1'] ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo $err_msg['password1']; ?></span>
+        <input type="password" name="password1" id="password1" value="<?php echo htmlspecialchars($_POST['password1'],ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo htmlspecialchars($err_msg['password1'],ENT_QUOTES); ?></span>
       </div>
     </div>
     <input type="submit" value="ログインする" class="btn">

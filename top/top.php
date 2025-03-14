@@ -9,13 +9,13 @@ $userId = $_SESSION['user_id'];
 
 // ポストに値があったら
 if (!empty($_POST)) {
-  $tweet = filter_input(INPUT_POST, 'post', FILTER_SANITIZE_SPECIAL_CHARS);
+  $post = filter_input(INPUT_POST, 'post', FILTER_SANITIZE_SPECIAL_CHARS);
   $stmt = $db->prepare('INSERT INTO
                           tweets (user_id,tweet)
                         VALUES (:user_id,:tweet)
                         ');
   $stmt->bindValue(':user_id', $userId);
-  $stmt->bindValue(':tweet', $tweet);
+  $stmt->bindValue(':tweet', $post);
   $stmt->execute();
   header('Location:http://localhost/top/top.php');
   exit();
@@ -23,7 +23,7 @@ if (!empty($_POST)) {
 
 // usersと結合してツイートの取得
 $stmt = $db->prepare("SELECT 
-                        first_name,last_name,tweet 
+                        tweets.id,first_name,last_name,tweet 
                       FROM
                         users
                       INNER JOIN
@@ -32,7 +32,7 @@ $stmt = $db->prepare("SELECT
                       ORDER BY tweets.id desc");
 $stmt->execute();
 $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+// var_dump($row);
 ?>
 
 
@@ -51,7 +51,7 @@ $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
   <div class="wrapper">
-    <h1><?php echo $firstName . $lastName ?></h1>
+    <h1><?php echo htmlspecialchars($firstName,ENT_QUOTES) . htmlspecialchars($lastName,ENT_QUOTES); ?></h1>
     <div class="flex">
       <main class="main">
         <form action="" class="form" method="post">
@@ -62,10 +62,10 @@ $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <?php foreach ($row as $tweet): ?>
             <div class="card">
               <p class="name">
-                <?php echo $tweet['first_name'] . $tweet['last_name'] ?>
+                <?php echo htmlspecialchars($tweet['first_name'],ENT_QUOTES) . htmlspecialchars($tweet['last_name'],ENT_QUOTES); ?>
               </p>
-              <p class="tweet"><?php echo $tweet['tweet'] ?></p>
-              <a href="http://localhost/reply/reply.php" class="replyBtn">リプライする</a>
+              <p class="tweet"><?php echo htmlspecialchars($tweet['tweet'],ENT_QUOTES); ?></p>
+              <a href="http://localhost/reply/reply.php?tweet_id=<?= $tweet["id"] ?>" class="replyBtn">リプライする</a>
             </div>
           <?php endforeach; ?>
         </div>
