@@ -45,6 +45,7 @@ if (!empty($_POST)) {
       $_SESSION['user_id'] = $row['id'];
       $_SESSION['first_name'] = $row['first_name'];
       $_SESSION['last_name'] = $row['last_name'];
+      $_SESSION['email'] = $email;
       header('Location:http://localhost/top/top.php');
       exit();
     }
@@ -69,14 +70,14 @@ if (!empty($_POST)) {
   <form action="" method="post" class="loginForm">
     <div class="email">
       <label for="email">メールアドレス</label>
-      <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($_POST['email'],ENT_QUOTES) ?? ""; ?>">
-      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo htmlspecialchars($err_msg['email'],ENT_QUOTES); ?></span>
+      <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($_POST['email'], ENT_QUOTES) ?? ""; ?>">
+      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo htmlspecialchars($err_msg['email'], ENT_QUOTES); ?></span>
     </div>
     <div class="password">
       <div class="password1">
         <label for="password1">パスワード</label>
-        <input type="password" name="password1" id="password1" value="<?php echo htmlspecialchars($_POST['password1'],ENT_QUOTES) ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo htmlspecialchars($err_msg['password1'],ENT_QUOTES); ?></span>
+        <input type="password" name="password1" id="password1" value="<?php echo htmlspecialchars($_POST['password1'], ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo htmlspecialchars($err_msg['password1'], ENT_QUOTES); ?></span>
       </div>
     </div>
     <input type="submit" value="ログインする" class="btn">

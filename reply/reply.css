@@ -42,7 +42,8 @@ h1::before {
 
 .aside {
   position: sticky;
-  width: 200px;
+  width: 250px;
+  padding-right: 16px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -53,7 +54,14 @@ h1::before {
   border-right: 1px solid rgba(0, 0, 0, .5);
 }
 
-
+.logout_btn {
+  display: block;
+  border-radius: 30px;
+  a {
+    font-size: 16px;
+    font-weight: normal;
+  }
+}
 
 
 .tweetCard {

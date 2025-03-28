@@ -3,9 +3,9 @@ session_start();
 require_once('../db_connect.php');
 
 // セッションの名前を保存
-$firstName = $_SESSION['first_name'];
-$lastName = $_SESSION['last_name'];
-$userId = $_SESSION['user_id'];
+$session_firstName = $_SESSION['first_name'];
+$session_lastName = $_SESSION['last_name'];
+$session_userId = $_SESSION['user_id'];
 
 // ツイートのidがあればその値を取得し表示、なければnullを代入する
 if (isset($_GET['tweet_id'])) {
@@ -51,7 +51,7 @@ if (!empty($_POST)) {
                                     VALUES(:tweet_id,:user_id,:reply)
   ");
   $stmt_insert_reply->bindValue(':tweet_id', $tweet_id);
-  $stmt_insert_reply->bindValue(':user_id', $userId);
+  $stmt_insert_reply->bindValue(':user_id', $session_userId);
   $stmt_insert_reply->bindValue(':reply', $reply_post);
   $stmt_insert_reply->execute();
   header("Location: http://localhost/reply/reply.php?tweet_id=" . urlencode($tweet_id));
@@ -72,18 +72,17 @@ if (!empty($_POST)) {
 
 <body>
   <div class="wrapper">
-    <h1><?php echo htmlspecialchars($firstName,ENT_QUOTES) . htmlspecialchars($lastName,ENT_QUOTES); ?></h1>
+    <h1><?php echo htmlspecialchars($session_firstName, ENT_QUOTES) . htmlspecialchars($session_lastName, ENT_QUOTES); ?></h1>
     <div class="flex">
       <main class="main">
         <div class="tweetCard">
           <p class="name">
-            <?php echo htmlspecialchars($row_tweet['first_name'],ENT_QUOTES) . htmlspecialchars($row_tweet['last_name'],ENT_QUOTES); ?>
+            <?php echo htmlspecialchars($row_tweet['first_name'], ENT_QUOTES) . htmlspecialchars($row_tweet['last_name'], ENT_QUOTES); ?>
           </p>
-          <p class="tweet"><?php echo htmlspecialchars($row_tweet['tweet'],ENT_QUOTES); ?></p>
+          <p class="tweet"><?php echo htmlspecialchars($row_tweet['tweet'], ENT_QUOTES); ?></p>
         </div>
         <form method="post" class="reply_form">
-          <textarea name="reply" id="reply" class="reply">
-          </textarea>
+          <textarea name="reply" id="reply" class="reply"></textarea>
           <input type="submit" value="返信する" class="btn">
         </form>
         <div class="reply_list">
@@ -92,14 +91,15 @@ if (!empty($_POST)) {
               <p class="name">
                 <?php echo htmlspecialchars($reply['first_name']) . htmlspecialchars($reply['last_name']); ?>
               </p>
-              <p class="tweet"><?php echo htmlspecialchars($reply['reply'],ENT_QUOTES); ?></p>
+              <p class="tweet"><?php echo htmlspecialchars($reply['reply'], ENT_QUOTES); ?></p>
             </div>
           <?php endforeach; ?>
         </div>
       </main>
       <aside class="aside">
         <li class="aside__item"><a href="http://localhost/top/top.php">ホーム</a></li>
-        <li class="aside__item"><a href="profile.php">プロフィール</a></li>
+        <li class="aside__item"><a href="../profile_edit/profile_edit.php">プロフィール</a></li>
+        <a href="../logout/logout.php">ログアウトする</a>
       </aside>
     </div>
   </div>

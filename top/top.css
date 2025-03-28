@@ -41,8 +41,9 @@ h1::before {
 }
 
 .aside {
-  width: 200px;
+  width: 250px;
   height: 100vh;
+  padding-right: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,6 +79,15 @@ h1::before {
   padding: 8px;
   text-decoration: underline;
   margin-left: auto;
+}
+
+.logout_btn {
+  display: block;
+  border-radius: 30px;
+  a {
+    font-size: 16px;
+    font-weight: normal;
+  }
 }
 
 .post {

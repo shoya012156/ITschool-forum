@@ -67,8 +67,23 @@ if (!empty($_POST)) {
       } else {
         $stmt = $db->prepare("insert into users(first_name,last_name,email, password) values(?, ?, ?, ?)");
         $stmt->execute([$firstName, $lastName, $email, $hashedPassword]);
-        header('Location: http://localhost/top/top.php');
-        exit();
+        // 登録されたユーザーのidを取得する
+        $new_user_id = $db->lastInsertId();
+        // 新規登録されたユーザーの情報をデータベースから取得 
+        $stmt_login = $db->prepare("SELECT users.id,first_name,last_name,email FROM users WHERE users.id = :id");
+        $stmt_login->bindValue(':id', $new_user_id);
+        $stmt_login->execute();
+        $user = $stmt_login->fetch(PDO::FETCH_ASSOC);
+        var_dump($user);
+        // $userが存在したらセッションに保存してログインさせる
+        if ($user) {
+          $_SESSION['user_id'] = $user['id'];
+          $_SESSION['first_name'] = $user['first_name'];
+          $_SESSION['last_name'] = $user['last_name'];
+          $_SESSION['email'] = $user['email'];
+          header("Location:http://localhost/top/top.php");
+          exit();
+        }
       }
     }
   }
@@ -96,29 +111,29 @@ if (!empty($_POST)) {
     <div class="form--name">
       <div class="firstName name">
         <label for="name">姓</label>
-        <input type="text" name="firstName" id="firstName" value="<?php echo htmlspecialchars($_POST['firstName'],ENT_QUOTES) ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['firstName'])) echo htmlspecialchars($err_msg['firstName'],ENT_QUOTES); ?></span>
+        <input type="text" name="firstName" id="firstName" value="<?php echo htmlspecialchars($_POST['firstName'], ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['firstName'])) echo htmlspecialchars($err_msg['firstName'], ENT_QUOTES); ?></span>
       </div>
       <div class="lastName name">
         <label for="name">名</label>
-        <input type="text" name="lastName" id="lastName" value="<?php echo htmlspecialchars($_POST['lastName'],ENT_QUOTES) ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['lastName'])) echo htmlspecialchars($err_msg['lastName'],ENT_QUOTES); ?></span>
+        <input type="text" name="lastName" id="lastName" value="<?php echo htmlspecialchars($_POST['lastName'], ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['lastName'])) echo htmlspecialchars($err_msg['lastName'], ENT_QUOTES); ?></span>
       </div>
     </div>
     <div class="email">
       <label for="email">メールアドレス</label>
-      <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($_POST['email'],ENT_QUOTES) ?? ""; ?>">
-      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo htmlspecialchars($err_msg['email'],ENT_QUOTES); ?></span>
+      <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($_POST['email'], ENT_QUOTES) ?? ""; ?>">
+      <span class="err--msg"><?php if (!empty($err_msg['email'])) echo htmlspecialchars($err_msg['email'], ENT_QUOTES); ?></span>
     </div>
     <div class="password">
       <div class="password1">
         <label for="password1">パスワード</label>
-        <input type="password" name="password1" id="password1" value="<?php echo htmlspecialchars($_POST['password1'],ENT_QUOTES) ?? ""; ?>">
-        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo htmlspecialchars($err_msg['password1'],ENT_QUOTES); ?></span>
+        <input type="password" name="password1" id="password1" value="<?php echo htmlspecialchars($_POST['password1'], ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['password1'])) echo htmlspecialchars($err_msg['password1'], ENT_QUOTES); ?></span>
       </div>
       <div class="password2">
         <label for="password2">パスワード再入力</label>
-        <input type="password" name="password2" id="password2" value="<?php echo htmlspecialchars($_POST['password2'],ENT_QUOTES) ?? ""; ?>">
+        <input type="password" name="password2" id="password2" value="<?php echo htmlspecialchars($_POST['password2'], ENT_QUOTES) ?? ""; ?>">
       </div>
     </div>
     <input type="submit" value="確認する" class="btn">
