@@ -8,12 +8,19 @@ $session_lastName = $_SESSION['last_name'];
 $session_userId = $_SESSION['user_id'];
 $session_email = $_SESSION['email'];
 
+// ログインしていなければログイン画面にリダイレクトさせる
+if (!$session_userId) {
+  header("Location:http://localhost/login/login.php");
+  exit();
+}
+
 // メールアドレスのバリデーション
 define('MSG01', '無効なメールアドレスです。');
 define('MSG02', 'パスワードは英数字8文字以上にして下さい。');
 define('MSG03', '新しいパスワードとパスワード(再入力)が一致しません。');
 define('MSG04', 'パスワードが違います。');
 $err_msg = array();
+$update_flag = false;
 
 // 入力された値を取得
 $input_firstName = filter_input(INPUT_POST, 'firstName');
@@ -40,8 +47,7 @@ if ($session_firstName !== $input_firstName) {
   $stmt_edit_firstName->bindValue(':user_id', $session_userId);
   $stmt_edit_firstName->execute();
   $_SESSION['first_name'] = $input_firstName;
-  header('Location:http://localhost/top/top.php');
-  exit();
+  $update_flag = true;
 }
 
 // 名の変更
@@ -61,8 +67,7 @@ if ($session_lastName !== $input_lastName) {
   $stmt_edit_lastName->bindValue(':user_id', $session_userId);
   $stmt_edit_lastName->execute();
   $_SESSION['last_name'] = $input_lastName;
-  header('Location:http://localhost/top/top.php');
-  exit();
+  $update_flag = true;
 }
 // メールアドレスの変更
 if ($input_email === null || $input_email === '') {
@@ -82,8 +87,7 @@ if ($session_email !== $input_email) {
     $stmt_edit_email->bindValue(':user_id', $session_userId);
     $stmt_edit_email->execute();
     $_SESSION['email'] = $input_email;
-    header('Location:http://localhost/top/top.php');
-    exit();
+    $update_flag = true;
   } else {
     $err_msg['email'] = MSG01;
   }
@@ -108,7 +112,7 @@ if ($input_password) {
   // パスワード(現在)とパスワード(取得)が一致するか
   if ($hashedPassword === $row_get_password['password']) {
     // パスワードの正規表現
-    if (!preg_match('/\A[a-z\d]{8,100}+\z/i', $input_password_new)) {
+    if (!preg_match('/\A[A-Za-z\d]{8,100}\z/',$input_password_new)) {
       $err_msg['password_new'] = MSG02;
     }
     // パスワードと再入力パスワードが一致しない場合
@@ -129,12 +133,17 @@ if ($input_password) {
       $stmt_edit_password->bindValue(':user_password', $hashedPassword_new);
       $stmt_edit_password->bindValue(':user_id', $session_userId);
       $stmt_edit_password->execute();
-      header('Location:http://localhost/top/top.php');
-      exit();
+      $update_flag = true;
     }
   } else {
     $err_msg['password'] = MSG04;
   }
+}
+
+// 一つでも変更があればリダイレクトさせる
+if ($update_flag) {
+  header("Location:http://localhost/top/top.php");
+  exit();
 }
 ?>
 

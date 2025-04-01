@@ -43,46 +43,46 @@ if (!empty($_POST)) {
       $err_msg['email'] = MSG02;
     }
 
-    // パスワードと再入力パスワードが一致しない場合
-    if ($password1 !== $password2) {
-      $err_msg['password1'] = MSG05;
-    }
-
     // ここまでエラーがなかった時
     if (empty($err_msg)) {
       // パスワードの正規表現
-      if (!preg_match('/\A[a-z\d]{8,100}+\z/i', $password1)) {
+      if (!preg_match('/\A[A-Za-z\d]{8,100}\z/', $password1)) {
         $err_msg['password1'] = MSG04;
       }
-      $hashedPassword = hash('sha256', $password1);
-      // メールアドレスの重複確認
-      // 受け取ったメールアドレスと一致するメールアドレスが存在していれば取得する 
-      $stmt = $db->prepare("select email from users where LOWER(email) = LOWER(?) LIMIT 1");
-      $stmt->execute([$email]);
-      $fetchEmail = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      // 重複していれば、エラーを出し、そうでなければ登録する
-      if (isset($fetchEmail['email'])) {
-        $err_msg['email'] = MSG03;
-      } else {
-        $stmt = $db->prepare("insert into users(first_name,last_name,email, password) values(?, ?, ?, ?)");
-        $stmt->execute([$firstName, $lastName, $email, $hashedPassword]);
-        // 登録されたユーザーのidを取得する
-        $new_user_id = $db->lastInsertId();
-        // 新規登録されたユーザーの情報をデータベースから取得 
-        $stmt_login = $db->prepare("SELECT users.id,first_name,last_name,email FROM users WHERE users.id = :id");
-        $stmt_login->bindValue(':id', $new_user_id);
-        $stmt_login->execute();
-        $user = $stmt_login->fetch(PDO::FETCH_ASSOC);
-        var_dump($user);
-        // $userが存在したらセッションに保存してログインさせる
-        if ($user) {
-          $_SESSION['user_id'] = $user['id'];
-          $_SESSION['first_name'] = $user['first_name'];
-          $_SESSION['last_name'] = $user['last_name'];
-          $_SESSION['email'] = $user['email'];
-          header("Location:http://localhost/top/top.php");
-          exit();
+      if ($password1 !== $password2) {
+        $err_msg['password1'] = MSG05;
+      }
+      if (empty($err_msg)) {
+        $hashedPassword = hash('sha256', $password1);
+        // メールアドレスの重複確認
+        // 受け取ったメールアドレスと一致するメールアドレスが存在していれば取得する 
+        $stmt = $db->prepare("select email from users where LOWER(email) = LOWER(?) LIMIT 1");
+        $stmt->execute([$email]);
+        $fetchEmail = $stmt->fetch(PDO::FETCH_ASSOC);
+        // 重複していれば、エラーを出し、そうでなければ登録する
+        if (isset($fetchEmail['email'])) {
+          $err_msg['email'] = MSG03;
+        } else {
+          $stmt = $db->prepare("insert into users(first_name,last_name,email, password) values(?, ?, ?, ?)");
+          $stmt->execute([$firstName, $lastName, $email, $hashedPassword]);
+          // 登録されたユーザーのidを取得する
+          $new_user_id = $db->lastInsertId();
+          // 新規登録されたユーザーの情報をデータベースから取得 
+          $stmt_login = $db->prepare("SELECT users.id,first_name,last_name,email FROM users WHERE users.id = :id");
+          $stmt_login->bindValue(':id', $new_user_id);
+          $stmt_login->execute();
+          $user = $stmt_login->fetch(PDO::FETCH_ASSOC);
+          var_dump($user);
+          // $userが存在したらセッションに保存してログインさせる
+          if ($user) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['first_name'] = $user['first_name'];
+            $_SESSION['last_name'] = $user['last_name'];
+            $_SESSION['email'] = $user['email'];
+            header("Location:http://localhost/top/top.php");
+            exit();
+          }
         }
       }
     }
@@ -134,6 +134,7 @@ if (!empty($_POST)) {
       <div class="password2">
         <label for="password2">パスワード再入力</label>
         <input type="password" name="password2" id="password2" value="<?php echo htmlspecialchars($_POST['password2'], ENT_QUOTES) ?? ""; ?>">
+        <span class="err--msg"><?php if (!empty($err_msg['password2'])) echo htmlspecialchars($err_msg['password2'], ENT_QUOTES); ?></span>
       </div>
     </div>
     <input type="submit" value="確認する" class="btn">

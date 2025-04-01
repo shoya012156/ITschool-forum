@@ -7,6 +7,12 @@ $session_firstName = $_SESSION['first_name'];
 $session_lastName = $_SESSION['last_name'];
 $session_userId = $_SESSION['user_id'];
 
+// ログインしていなければログイン画面にリダイレクトさせる
+if (!$session_userId) {
+  header("Location:http://localhost/login/login.php");
+  exit();
+}
+
 // ツイートのidがあればその値を取得し表示、なければnullを代入する
 if (isset($_GET['tweet_id'])) {
   $tweet_id = $_GET['tweet_id'];

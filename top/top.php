@@ -7,6 +7,12 @@ $session_firstName = $_SESSION['first_name'];
 $session_lastName = $_SESSION['last_name'];
 $session_userId = $_SESSION['user_id'];
 
+// ログインしていなければログイン画面にリダイレクトさせる
+if (!$session_userId) {
+  header("Location:http://localhost/login/login.php");
+  exit();
+}
+
 // ポストに値があったら
 if (!empty($_POST)) {
   $post = filter_input(INPUT_POST, 'post', FILTER_SANITIZE_SPECIAL_CHARS);
